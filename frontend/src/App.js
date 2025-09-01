@@ -5,9 +5,11 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Dashboard from './components/dashboard/Dashboard';
+import EnhancedDashboard from './components/dashboard/EnhancedDashboard';
 import PortfolioList from './components/portfolio/PortfolioList';
 import PortfolioDetail from './components/portfolio/PortfolioDetail';
 import PortfolioManagement from './components/portfolio/PortfolioManagement';
+import InvestmentManagement from './components/investment/InvestmentManagement';
 import UserProfile from './components/profile/UserProfile';
 import Layout from './components/layout/Layout';
 
@@ -40,9 +42,10 @@ function AppRoutes() {
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<EnhancedDashboard />} />
         <Route path="/portfolios" element={<PortfolioManagement />} />
         <Route path="/portfolios/:id" element={<PortfolioDetail />} />
+        <Route path="/portfolios/:portfolioId/investments" element={<InvestmentManagement />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -26,6 +26,7 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -46,6 +47,7 @@ const PortfolioCard = styled(Card)(({ theme }) => ({
 
 function PortfolioManagement() {
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -269,8 +271,13 @@ function PortfolioManagement() {
                 </CardContent>
                 
                 <CardActions>
-                  <Button size="small" variant="outlined" fullWidth>
-                    View Details
+                  <Button 
+                    size="small" 
+                    variant="outlined" 
+                    fullWidth
+                    onClick={() => navigate(`/portfolios/${portfolio.id}/investments`)}
+                  >
+                    Manage Investments
                   </Button>
                 </CardActions>
               </PortfolioCard>

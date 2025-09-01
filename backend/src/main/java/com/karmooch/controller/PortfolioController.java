@@ -45,6 +45,24 @@ public class PortfolioController {
         }
     }
     
+    @GetMapping("/summary")
+    public ResponseEntity<?> getUserPortfolioSummaries(@RequestHeader("Authorization") String token) {
+        try {
+            Long userId = extractUserIdFromToken(token);
+            List<Portfolio> portfolios = portfolioService.getPortfoliosByUser(userId);
+            
+            List<PortfolioSummaryDto> portfolioSummaries = portfolios.stream()
+                .map(PortfolioSummaryDto::fromPortfolio)
+                .collect(Collectors.toList());
+            
+            return ResponseEntity.ok(portfolioSummaries);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("message", "Invalid token"));
+        }
+    }
+    
     @PostMapping
     public ResponseEntity<?> createPortfolio(@RequestHeader("Authorization") String token,
                                            @Valid @RequestBody CreatePortfolioRequest request) {
