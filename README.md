@@ -1,1 +1,3 @@
 # karmooch
+
+Prototype Karmoochi application
