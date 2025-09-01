@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: karmooch_db
+    environment:
+      POSTGRES_DB: karmooch
+      POSTGRES_USER: karmooch_user
+      POSTGRES_PASSWORD: karmooch_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - karmooch_network
+
+  # Backend API Server (Spring Boot)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: karmooch_backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/karmooch
+      SPRING_DATASOURCE_USERNAME: karmooch_user
+      SPRING_DATASOURCE_PASSWORD: karmooch_password
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - karmooch_network
+    restart: unless-stopped
+
+  # Frontend React Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: karmooch_frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:8080/api
+      REACT_APP_ENV: development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - karmooch_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  karmooch_network:
+    driver: bridge

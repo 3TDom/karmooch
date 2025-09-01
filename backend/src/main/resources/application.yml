@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/karmooch
+    username: karmooch_user
+    password: karmooch_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 8080
+
+jwt:
+  secret: your-super-secret-jwt-key-change-in-production
+  expiration: 86400000 # 24 hours
+
+logging:
+  level:
+    com.karmooch: DEBUG
+    org.springframework.security: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://db:5432/karmooch
+    username: ${SPRING_DATASOURCE_USERNAME:karmooch_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:karmooch_password}
+
+jwt:
+  secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
+
+server:
+  port: ${SERVER_PORT:8080}
