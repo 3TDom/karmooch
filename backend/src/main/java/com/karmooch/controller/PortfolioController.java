@@ -5,12 +5,15 @@ import com.karmooch.entity.Portfolio;
 import com.karmooch.entity.User;
 import com.karmooch.service.PortfolioService;
 import com.karmooch.service.UserService;
+import com.karmooch.service.MarketDataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +29,9 @@ public class PortfolioController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private MarketDataService marketDataService;
     
     @GetMapping
     public ResponseEntity<?> getUserPortfolios(@RequestHeader("Authorization") String token) {
@@ -51,8 +57,16 @@ public class PortfolioController {
             Long userId = extractUserIdFromToken(token);
             List<Portfolio> portfolios = portfolioService.getPortfoliosByUser(userId);
             
+            // Collect all unique symbols from all portfolios
+            Map<String, BigDecimal> currentPrices = new HashMap<>();
+            portfolios.stream()
+                .flatMap(portfolio -> portfolio.getInvestments().stream())
+                .map(investment -> investment.getSymbol())
+                .distinct()
+                .forEach(symbol -> currentPrices.put(symbol, marketDataService.getCurrentPrice(symbol)));
+            
             List<PortfolioSummaryDto> portfolioSummaries = portfolios.stream()
-                .map(PortfolioSummaryDto::fromPortfolio)
+                .map(portfolio -> PortfolioSummaryDto.fromPortfolioWithCurrentPrices(portfolio, currentPrices))
                 .collect(Collectors.toList());
             
             return ResponseEntity.ok(portfolioSummaries);

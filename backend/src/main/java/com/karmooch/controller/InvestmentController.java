@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -48,7 +49,10 @@ public class InvestmentController {
             
             List<Investment> investments = investmentService.getInvestmentsByPortfolio(portfolioId);
             List<InvestmentDto> investmentDtos = investments.stream()
-                .map(InvestmentDto::fromInvestment)
+                .map(investment -> {
+                    BigDecimal currentPrice = marketDataService.getCurrentPrice(investment.getSymbol());
+                    return InvestmentDto.fromInvestmentWithCurrentPrice(investment, currentPrice);
+                })
                 .collect(Collectors.toList());
             
             return ResponseEntity.ok(investmentDtos);

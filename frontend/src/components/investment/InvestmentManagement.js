@@ -289,11 +289,13 @@ function InvestmentManagement() {
               <TableRow>
                 <TableCell>Symbol</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Shares</TableCell>
-                <TableCell align="right">Purchase Price</TableCell>
-                <TableCell align="right">Total Value</TableCell>
-                <TableCell align="right">Purchase Date</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                                  <TableCell align="right">Shares</TableCell>
+                  <TableCell align="right">Purchase Price</TableCell>
+                  <TableCell align="right">Current Price</TableCell>
+                  <TableCell align="right">Current Value</TableCell>
+                  <TableCell align="right">Gain/Loss</TableCell>
+                  <TableCell align="right">Purchase Date</TableCell>
+                  <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -309,8 +311,23 @@ function InvestmentManagement() {
                   <TableCell>{investment.name}</TableCell>
                   <TableCell align="right">{investment.shares}</TableCell>
                   <TableCell align="right">{formatCurrency(investment.purchasePrice)}</TableCell>
+                  <TableCell align="right">{formatCurrency(investment.currentPrice)}</TableCell>
+                  <TableCell align="right">{formatCurrency(investment.currentValue)}</TableCell>
                   <TableCell align="right">
-                    {formatCurrency(calculateTotalValue(investment.shares, investment.purchasePrice))}
+                    <Box display="flex" alignItems="center" justifyContent="flex-end">
+                      {investment.gainLoss >= 0 ? (
+                        <TrendingUpIcon sx={{ color: 'success.main', mr: 0.5, fontSize: 16 }} />
+                      ) : (
+                        <TrendingDownIcon sx={{ color: 'error.main', mr: 0.5, fontSize: 16 }} />
+                      )}
+                      <Typography 
+                        variant="body2" 
+                        color={investment.gainLoss >= 0 ? 'success.main' : 'error.main'}
+                        fontWeight="bold"
+                      >
+                        {formatCurrency(investment.gainLoss)} ({investment.gainLossPercentage.toFixed(2)}%)
+                      </Typography>
+                    </Box>
                   </TableCell>
                   <TableCell align="right">{formatDate(investment.purchaseDate)}</TableCell>
                   <TableCell align="center">
