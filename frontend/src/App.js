@@ -10,6 +10,7 @@ import PortfolioList from './components/portfolio/PortfolioList';
 import PortfolioDetail from './components/portfolio/PortfolioDetail';
 import PortfolioManagement from './components/portfolio/PortfolioManagement';
 import InvestmentManagement from './components/investment/InvestmentManagement';
+import IpoCalendar from './components/ipo/IpoCalendar';
 import UserProfile from './components/profile/UserProfile';
 import Layout from './components/layout/Layout';
 
@@ -46,6 +47,7 @@ function AppRoutes() {
         <Route path="/portfolios" element={<PortfolioManagement />} />
         <Route path="/portfolios/:id" element={<PortfolioDetail />} />
         <Route path="/portfolios/:portfolioId/investments" element={<InvestmentManagement />} />
+        <Route path="/ipo" element={<IpoCalendar />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

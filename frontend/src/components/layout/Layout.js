@@ -21,6 +21,7 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   AccountBalance as PortfolioIcon,
+  TrendingUp as IpoIcon,
   Person as PersonIcon,
   Logout as LogoutIcon
 } from '@mui/icons-material';
@@ -55,7 +56,8 @@ const Layout = ({ children }) => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
-    { text: 'Portfolios', icon: <PortfolioIcon />, path: '/portfolios' }
+    { text: 'Portfolios', icon: <PortfolioIcon />, path: '/portfolios' },
+    { text: 'IPO Calendar', icon: <IpoIcon />, path: '/ipo' }
   ];
 
   const drawer = (

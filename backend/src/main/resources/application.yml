@@ -26,6 +26,10 @@ jwt:
   secret: your-super-secret-jwt-key-change-in-production
   expiration: 86400000 # 24 hours
 
+finnhub:
+  api:
+    key: "d2qlms9r01qn21mk39i0d2qlms9r01qn21mk39ig"
+
 logging:
   level:
     com.karmooch: DEBUG
@@ -43,6 +47,10 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET:your-super-secret-jwt-key-change-in-production}
+
+finnhub:
+  api:
+    key: ${FINNHUB_API_KEY:d2qlms9r01qn21mk39i0d2qlms9r01qn21mk39ig}
 
 server:
   port: ${SERVER_PORT:8080}
